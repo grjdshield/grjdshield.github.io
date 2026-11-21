@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | GRJD Shield</title>
+    <meta name="description" content="GRJD Shield is a free Chrome extension that uses a Random Forest model to detect and block phishing websites in real time, before the page loads.">
+    <link rel="icon" href="images/icon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================= SVG ICONS ================= -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <linearGradient id="gShield" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#8a6be0"/>
+                <stop offset="1" stop-color="#5b3fc4"/>
+            </linearGradient>
+        </defs>
+        <symbol id="i-logo" viewBox="0 0 64 72"><path d="M32 2 60 12v22c0 18-12 31-28 36C16 65 4 52 4 34V12Z" fill="url(#gShield)"/><path d="M32 9 53 17v17c0 14-9 24-21 29Z" fill="#fff" opacity=".14"/><rect x="21" y="32" width="22" height="18" rx="3.5" fill="#fff"/><path d="M25 32v-5a7 7 0 0 1 14 0v5" fill="none" stroke="#fff" stroke-width="3.6"/><circle cx="32" cy="40" r="2.6" fill="#5b3fc4"/><path d="M32 41v4.5" stroke="#5b3fc4" stroke-width="2.4" stroke-linecap="round"/></symbol>
+        <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+        <symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 3 6 11h3l-4 6h14l-4-6h3Zm0 14v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+        <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 12h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+        <symbol id="i-hand" viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V12m0-1a1.5 1.5 0 0 1 3 0v4.5A5.5 5.5 0 0 1 12.5 21h-1a5.5 5.5 0 0 1-4.6-2.5L4.4 14.6a1.5 1.5 0 0 1 2.4-1.8L9 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2.8 22.5 21H1.5Z" fill="currentColor"/><path d="M12 9.5v5M12 17.6v.1" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-chrome" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8.5h8M9 13.8 5 7M15 13.8l-4 7" stroke="currentColor" stroke-width="2"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    </svg>
+
+    <!-- ================= NAVIGATION ================= -->
+    <header class="nav">
+        <div class="wrap nav-inner">
+            <a href="index.html#top" class="brand">
+                <img class="brand-logo" src="images/logo.png" alt="GRJD Shield logo">
+                <span>GRJD Shield</span>
+            </a>
+            <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false">
+                <svg><use href="#i-menu"/></svg>
+            </button>
+            <nav class="links" id="navLinks">
+                <a href="index.html#about">About</a>
+                <a href="index.html#features">Features</a>
+                <a href="index.html#how">How It Works</a>
+                <a href="index.html#screenshots">Screenshots</a>
+                <a href="index.html#install">Install</a>
+                <a href="index.html#download" class="btn btn-primary btn-small">Install Extension</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="policy-page" id="top">
+        <div class="wrap policy">
+            <span class="pill">Privacy Policy</span>
+            <h1>GRJD Shield Privacy Policy</h1>
+            <p class="policy-date">Effective date: November 21, 2026</p>
+
+            <p>GRJD Shield is a browser extension that helps users detect phishing websites. It was developed by Bachelor of Science in Computer Science students of the College of Computing Studies, Laguna University, as part of the research study &ldquo;Random Forest-Based Browser Extension for Real-Time Phishing Website Detection.&rdquo; This policy explains what information the extension uses, how it is used, and what is stored.</p>
+
+            <div class="policy-highlight">
+                <strong>In short:</strong> GRJD Shield checks website addresses <em>inside your own browser</em>. It does not send your browsing data, personal information, or scan results to the developers or to any other party. The only exception is a short link (such as bit.ly): the extension asks that link service where the link leads, as described in Section 1.
+            </div>
+
+            <h2>1. Information the extension uses</h2>
+            <ul>
+                <li><strong>Website addresses (URLs).</strong> When you open a website, the extension reads its address and analyzes it with a Random Forest machine-learning model to decide whether the website may be phishing.</li>
+                <li><strong>URLs you type in Manual Check.</strong> These are analyzed in the same way.</li>
+                <li><strong>Short links (for example bit.ly or t.co).</strong> A short link hides the real website address. When the model cannot decide from the short link alone, the extension asks the link service (for example bit.ly) where the link leads, and then analyzes that real address with the same model. This request only reads the final address: the page is not opened or shown, no cookies or personal information are sent, and the download stops right away. The address is not saved or sent to us.</li>
+                <li><strong>Page content, only when you click &ldquo;Scan Website.&rdquo;</strong> The extension reads the links and basic page structure (for example, the page title and whether the page has login or password fields) of the current tab to check them for phishing signs.</li>
+            </ul>
+            <p>All of this analysis happens <strong>locally on your device</strong>. The machine-learning model is included inside the extension and works without an internet connection to any server of ours. The only network request the extension makes is the short-link check described above, which goes directly to the link service and not to us.</p>
+
+            <h2>2. Information we do not collect</h2>
+            <ul>
+                <li>We do not collect, sell, or share your browsing history, the websites you visit, or your scan results.</li>
+                <li>We do not collect personal information such as names, email addresses, passwords, or payment details.</li>
+                <li>The extension has no user accounts, no advertising, and no analytics or tracking tools.</li>
+            </ul>
+
+            <h2>3. Information stored on your device</h2>
+            <p>The extension saves a small amount of data in your browser&rsquo;s own storage so that its features work. This data stays on your device and is never uploaded.</p>
+            <ul>
+                <li><strong>Scan history:</strong> up to the 50 most recent checked websites, each with the website address, the result (safe or phishing), and the date and time.</li>
+                <li><strong>Settings:</strong> your Notifications and Auto Scan choices.</li>
+                <li><strong>Response-time log:</strong> for each automatic check, the website name, the result, and how many milliseconds the check took (up to 500 entries). It is used only to measure the speed of the extension.</li>
+                <li><strong>&ldquo;Continue to Website&rdquo; choice:</strong> when you choose to continue to a flagged website, this choice is kept only for that tab and is removed when the browser is closed.</li>
+            </ul>
+            <p>You can delete the scan history at any time with the <strong>Clear history</strong> button in the extension&rsquo;s History page. Removing the extension deletes all of its stored data.</p>
+
+            <h2>4. Permissions and why they are needed</h2>
+            <table class="policy-table">
+                <thead><tr><th>Permission</th><th>Why it is needed</th></tr></thead>
+                <tbody>
+                    <tr><td>tabs</td><td>To read the address of the current tab and open the warning page when a phishing website is detected.</td></tr>
+                    <tr><td>webNavigation</td><td>To check a website address as soon as you start opening it, so a phishing page can be blocked before it loads.</td></tr>
+                    <tr><td>offscreen</td><td>To run the machine-learning model in the background in Chrome and Edge.</td></tr>
+                    <tr><td>storage</td><td>To save your settings and scan history on your device.</td></tr>
+                    <tr><td>notifications</td><td>To show an alert when a phishing website is blocked (can be turned off in Settings).</td></tr>
+                    <tr><td>activeTab and scripting</td><td>To read the links of the current page only when you click &ldquo;Scan Website.&rdquo;</td></tr>
+                    <tr><td>Access to all websites (host permission)</td><td>To find the real destination of a short link (for example bit.ly) so the machine-learning model can analyze the real website address. The extension does not read or change the content of the websites you visit with this permission.</td></tr>
+                    <tr><td>favicon</td><td>To show website icons in the History page using the browser&rsquo;s built-in icon cache.</td></tr>
+                </tbody>
+            </table>
+
+            <h2>5. Accuracy of results</h2>
+            <p>Detection results are predictions made by a machine-learning model. The extension may sometimes flag a safe website or miss a phishing website. A result does not guarantee that a website is safe or harmful, so please always check the website address before entering personal information.</p>
+
+            <h2>6. Children</h2>
+            <p>GRJD Shield is intended for internet users aged 13 years and above. It does not knowingly collect any information from anyone, including children.</p>
+
+            <h2>7. Changes to this policy</h2>
+            <p>If this policy changes, the updated version will be posted on this page with a new effective date.</p>
+
+            <h2>8. Contact</h2>
+            <!-- PALITAN: ilagay ang email ng grupo -->
+            <p>For questions about this policy, contact the GRJD Shield team at <a href="mailto:grjdshield.team@gmail.com">grjdshield.team@example.com</a>.</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="wrap footer-inner">
+            <div class="footer-brand">
+                <a href="index.html#top" class="brand">
+                    <img class="brand-logo" src="images/logo.png" alt="GRJD Shield logo">
+                    <span>GRJD Shield</span>
+                </a>
+                <p>
+                    Random Forest-Based Browser Extension for Real-Time Phishing Website Detection.
+                    A research project of Bachelor of Science in Computer Science students,
+                    College of Computing Studies, Laguna University.
+                </p>
+            </div>
+            <div>
+                <h4>Developers</h4>
+                <p class="footer-tag">Built by four, protecting all.</p>
+                <ul>
+                    <li>Julianna F. Altamirano</li>
+                    <li>Roselyn L. Macasinag</li>
+                    <li>Gail Angust L. Barrios</li>
+                    <li>Danica B. Agnes</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#install">Install</a></li>
+                    <li><a href="index.html#download">Download</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="copyright">&copy; <span id="year">2026</span> GRJD Shield. Detection results are machine-learning predictions and do not guarantee that a website is safe.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

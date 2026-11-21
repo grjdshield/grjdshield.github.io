@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRJD Shield | Detect the Threat, Defend Your Digital World</title>
+    <meta name="description" content="GRJD Shield is a free Chrome and Firefox extension that uses a Random Forest model to detect and block phishing websites in real time, before the page loads.">
+    <link rel="icon" href="images/icon.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ================= SVG ICONS ================= -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <linearGradient id="gShield" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#8a6be0"/>
+                <stop offset="1" stop-color="#5b3fc4"/>
+            </linearGradient>
+        </defs>
+        <symbol id="i-logo" viewBox="0 0 64 72"><path d="M32 2 60 12v22c0 18-12 31-28 36C16 65 4 52 4 34V12Z" fill="url(#gShield)"/><path d="M32 9 53 17v17c0 14-9 24-21 29Z" fill="#fff" opacity=".14"/><rect x="21" y="32" width="22" height="18" rx="3.5" fill="#fff"/><path d="M25 32v-5a7 7 0 0 1 14 0v5" fill="none" stroke="#fff" stroke-width="3.6"/><circle cx="32" cy="40" r="2.6" fill="#5b3fc4"/><path d="M32 41v4.5" stroke="#5b3fc4" stroke-width="2.4" stroke-linecap="round"/></symbol>
+        <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+        <symbol id="i-tree" viewBox="0 0 24 24"><path d="M12 3 6 11h3l-4 6h14l-4-6h3Zm0 14v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+        <symbol id="i-scan" viewBox="0 0 24 24"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 12h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+        <symbol id="i-hand" viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V12m0-1a1.5 1.5 0 0 1 3 0v4.5A5.5 5.5 0 0 1 12.5 21h-1a5.5 5.5 0 0 1-4.6-2.5L4.4 14.6a1.5 1.5 0 0 1 2.4-1.8L9 15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="m7.5 12.3 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2.8 22.5 21H1.5Z" fill="currentColor"/><path d="M12 9.5v5M12 17.6v.1" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-chrome" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8.5h8M9 13.8 5 7M15 13.8l-4 7" stroke="currentColor" stroke-width="2"/></symbol>
+        <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    </svg>
+
+    <!-- ================= NAVIGATION ================= -->
+    <header class="nav">
+        <div class="wrap nav-inner">
+            <a href="#top" class="brand">
+                <img class="brand-logo" src="images/logo.png" alt="GRJD Shield logo">
+                <span>GRJD Shield</span>
+            </a>
+            <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-expanded="false">
+                <svg><use href="#i-menu"/></svg>
+            </button>
+            <nav class="links" id="navLinks">
+                <a href="#about">About</a>
+                <a href="#features">Features</a>
+                <a href="#how">How It Works</a>
+                <a href="#screenshots">Screenshots</a>
+                <a href="#install">Install</a>
+                <a href="#download" class="btn btn-primary btn-small">Install Extension</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="top">
+
+        <!-- ================= HERO ================= -->
+        <section class="hero">
+            <div class="wrap hero-inner">
+                <div class="hero-text">
+                    <span class="pill">GRJD Shield · Detect the Threat, Defend Your Digital World</span>
+                    <h1>Protect Yourself from <span>Phishing Websites</span></h1>
+                    <p class="lead">
+                        GRJD Shield is a free extension for Chrome and Firefox that checks every
+                        website you open and warns you in real time, before a phishing page even loads.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="#about" class="btn btn-outline">Learn More</a>
+                        <a href="#download" class="btn btn-primary">
+                            <svg aria-hidden="true"><use href="#i-download"/></svg>
+                            Install Extension
+                        </a>
+                    </div>
+                    <ul class="hero-points">
+                        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Free to use</li>
+                        <li><svg aria-hidden="true"><use href="#i-check"/></svg>Works inside your browser</li>
+                        <li><svg aria-hidden="true"><use href="#i-check"/></svg>No account needed</li>
+                    </ul>
+                </div>
+
+                <div class="hero-visual" aria-hidden="true">
+                    <img class="shot shot-back" src="images/popup-phishing.jpg" alt="">
+                    <img class="shot shot-front" src="images/popup-home.jpg" alt="">
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ABOUT / PURPOSE ================= -->
+        <section class="section" id="about">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="eyebrow">About</span>
+                    <h2>What is GRJD Shield?</h2>
+                </div>
+
+                <div class="about-grid">
+                    <div class="card about-card">
+                        <h3>The extension</h3>
+                        <p>
+                            GRJD Shield is a browser extension for Google Chrome and Mozilla Firefox.
+                            It uses a <strong>Random Forest</strong> machine-learning model to look at
+                            the address (URL) of a website and decide whether it is
+                            <strong>legitimate</strong> or <strong>phishing</strong>.
+                        </p>
+                        <p>
+                            The model runs directly inside your browser, so it can check websites
+                            instantly, even links that have never been reported before.
+                        </p>
+                    </div>
+
+                    <div class="card about-card">
+                        <h3>Its purpose</h3>
+                        <ul class="check-list">
+                            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Protect users from fake websites that steal passwords, bank details, and personal information.</li>
+                            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Warn users in real time, before a phishing page loads.</li>
+                            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Detect new phishing links, not only the ones already on a list.</li>
+                            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Help users browse with more confidence.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="stats">
+                    <div class="stat"><strong>30</strong><span>URL features analyzed</span></div>
+                    <div class="stat"><strong>400</strong><span>Decision trees</span></div>
+                    <div class="stat"><strong>95.1%</strong><span>Random Forest accuracy on test data</span></div>
+                    <div class="stat"><strong>&lt; 0.1 s</strong><span>Average detection time</span></div>
+                </div>
+
+                <div class="name-block">
+                    <img class="name-logo" src="images/logo.png" alt="GRJD Shield logo">
+                    <div class="name-text">
+                        <h3>The meaning of GRJD</h3>
+                        <p>GRJD comes from the initials of the four developers, and each letter stands for what the extension does.</p>
+                        <div class="letters">
+                            <div class="letter"><strong>G</strong><span>Guard</span><small>Protects users from online threats.</small></div>
+                            <div class="letter"><strong>R</strong><span>Recognize</span><small>Identifies phishing websites and links.</small></div>
+                            <div class="letter"><strong>J</strong><span>Judge</span><small>Analyzes URLs to decide if they are risky.</small></div>
+                            <div class="letter"><strong>D</strong><span>Defend</span><small>Blocks harmful websites before they load.</small></div>
+                        </div>
+                        <p class="name-tag">&ldquo;Built by four, protecting all.&rdquo;</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= FEATURES ================= -->
+        <section class="section section-tint" id="features">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="eyebrow">Features</span>
+                    <h2>Everything you need to browse safely</h2>
+                </div>
+
+                <div class="feature-grid">
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-bolt"/></svg></span>
+                        <h3>Real-time blocking</h3>
+                        <p>Every website you open is checked before it loads. Phishing websites are stopped and a warning page appears.</p>
+                    </article>
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-tree"/></svg></span>
+                        <h3>Random Forest detection</h3>
+                        <p>A machine-learning model with 400 decision trees analyzes 30 features of the URL and gives a phishing probability.</p>
+                    </article>
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-scan"/></svg></span>
+                        <h3>Full website scan</h3>
+                        <p>Scan the whole page you are on: every link inside it and the page content, like forms and hidden frames.</p>
+                    </article>
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-hand"/></svg></span>
+                        <h3>Manual URL check</h3>
+                        <p>Not sure about a link? Paste it into Manual Check and see the result before you open it.</p>
+                    </article>
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-clock"/></svg></span>
+                        <h3>Scan history</h3>
+                        <p>See the websites you checked, with the date, time, and whether each one was safe or phishing.</p>
+                    </article>
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-lock"/></svg></span>
+                        <h3>Private by design</h3>
+                        <p>Detection happens on your computer. Your browsing history is never sent to us or to any server.</p>
+                    </article>
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-link"/></svg></span>
+                        <h3>Short link check</h3>
+                        <p>Short links like bit.ly hide the real address. GRJD Shield finds where the link really goes and checks that website.</p>
+                    </article>
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-alert"/></svg></span>
+                        <h3>Clear warning page</h3>
+                        <p>See the website address and its phishing probability. You can go back to safety or continue once at your own risk.</p>
+                    </article>
+                    <article class="card feature">
+                        <span class="feature-icon"><svg aria-hidden="true"><use href="#i-chrome"/></svg></span>
+                        <h3>Chrome and Firefox</h3>
+                        <p>Install it on Google Chrome or Mozilla Firefox. The same Random Forest model runs in both browsers.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= HOW IT WORKS ================= -->
+        <section class="section" id="how">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="eyebrow">How It Works</span>
+                    <h2>From link to verdict in under a second</h2>
+                </div>
+
+                <ol class="steps">
+                    <li class="card step">
+                        <span class="step-num">1</span>
+                        <h3>You open a link</h3>
+                        <p>Type a URL, click a link, or open a new tab.</p>
+                    </li>
+                    <li class="card step">
+                        <span class="step-num">2</span>
+                        <h3>30 features are extracted</h3>
+                        <p>HTTPS, URL length, digits, dots, subdomains, randomness, and more.</p>
+                    </li>
+                    <li class="card step">
+                        <span class="step-num">3</span>
+                        <h3>Random Forest decides</h3>
+                        <p>400 decision trees vote on whether the website is phishing. For a short link, the real destination is checked.</p>
+                    </li>
+                    <li class="card step">
+                        <span class="step-num">4</span>
+                        <h3>Block or open</h3>
+                        <p>Phishing websites are blocked with a warning. Legitimate websites open normally.</p>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- ================= SCREENSHOTS ================= -->
+        <section class="section section-tint" id="screenshots">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="eyebrow">Screenshots</span>
+                    <h2>See the extension in action</h2>
+                    <p class="sub">Click any screenshot to view it larger.</p>
+                </div>
+
+                <div class="gallery">
+                    <figure><img src="images/popup-home.jpg" alt="Extension popup showing a legitimate website"><figcaption>Legitimate website</figcaption></figure>
+                    <figure><img src="images/popup-phishing.jpg" alt="Extension popup showing a phishing website"><figcaption>Phishing detected</figcaption></figure>
+                    <figure><img src="images/popup-scan.jpg" alt="Scan result showing the links inside a website"><figcaption>Full website scan</figcaption></figure>
+                    <figure><img src="images/popup-manual.jpg" alt="Manual Check of a URL"><figcaption>Manual Check</figcaption></figure>
+                    <figure><img src="images/popup-history.jpg" alt="Scan history list"><figcaption>Scan history</figcaption></figure>
+                    <figure><img src="images/popup-settings.jpg" alt="Settings page"><figcaption>Settings</figcaption></figure>
+                </div>
+
+                <figure class="wide-shot">
+                    <img src="images/warning-page.jpg" alt="Warning page shown when a phishing website is blocked">
+                    <figcaption>The warning page that appears when a phishing website is blocked.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <!-- ================= INSTALL & USE ================= -->
+        <section class="section" id="install">
+            <div class="wrap">
+                <div class="section-head">
+                    <span class="eyebrow">Install &amp; Use</span>
+                    <h2>Get started in a few minutes</h2>
+                </div>
+
+                <div class="install-grid">
+                    <div class="card">
+                        <h3>How to install</h3>
+                        <p class="install-sub"><strong>On Google Chrome:</strong></p>
+                        <ol class="num-list">
+                            <li><strong>Download</strong> the extension ZIP file below and extract (unzip) it.</li>
+                            <li>Open Google Chrome and go to <code>chrome://extensions</code>.</li>
+                            <li>Turn on <strong>Developer mode</strong> at the top right.</li>
+                            <li>Click <strong>Load unpacked</strong> and select the extracted <code>PhishingDetection</code> folder.</li>
+                            <li>Click the puzzle icon in the toolbar and <strong>pin</strong> GRJD Shield.</li>
+                        </ol>
+                        <p class="install-sub"><strong>On Mozilla Firefox:</strong></p>
+                        <ol class="num-list">
+                            <li>Extract the ZIP file, then go to <code>about:debugging</code> and click <strong>This Firefox</strong>.</li>
+                            <li>Click <strong>Load Temporary Add-on</strong> and select the <code>manifest.json</code> file inside the folder.</li>
+                            <li>Go to <code>about:addons</code>, open GRJD Shield &gt; <strong>Permissions</strong>, and turn on access to all websites (needed for the short link check).</li>
+                        </ol>
+                        <p class="note">The model loads in about 20 seconds after installing. Coming soon: install with one click from the Chrome Web Store and Firefox Add-ons.</p>
+                    </div>
+
+                    <div class="card">
+                        <h3>How to use</h3>
+                        <ol class="num-list">
+                            <li><strong>Browse normally.</strong> Phishing websites are blocked automatically.</li>
+                            <li>Click the extension icon to see if the current website is <strong>legitimate or phishing</strong>.</li>
+                            <li>Click <strong>Scan Website</strong> to check every link and the content of the page.</li>
+                            <li>Use <strong>Manual Check</strong> to test any link before opening it.</li>
+                            <li>Open <strong>History</strong> to see the websites you checked.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= DOWNLOAD ================= -->
+        <section class="download" id="download">
+            <div class="wrap download-inner">
+                <div>
+                    <h2>Protect your browsing today.</h2>
+                    <p>Free for Google Chrome and Mozilla Firefox. Detect the Threat, Defend Your Digital World.</p>
+                </div>
+                <div class="download-buttons">
+                    <!-- PALITAN: ilagay ang file ng extension sa downloads/PhishingDetection.zip -->
+                    <a href="downloads/PhishingDetection.zip" class="btn btn-primary" download>
+                        <svg aria-hidden="true"><use href="#i-download"/></svg>
+                        Download Extension (ZIP)
+                    </a>
+                    <!-- PALITAN: kapag na-publish na, ilagay ang Chrome Web Store link sa href
+                         at tanggalin ang class="is-disabled" at aria-disabled -->
+                    <a href="#download" class="btn btn-light is-disabled" id="storeButton" aria-disabled="true">
+                        <svg aria-hidden="true"><use href="#i-chrome"/></svg>
+                        Chrome Web Store (coming soon)
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="wrap footer-inner">
+            <div class="footer-brand">
+                <a href="#top" class="brand">
+                    <img class="brand-logo" src="images/logo.png" alt="GRJD Shield logo">
+                    <span>GRJD Shield</span>
+                </a>
+                <p>
+                    Random Forest-Based Browser Extension for Real-Time Phishing Website Detection.
+                    A research project of Bachelor of Science in Computer Science students,
+                    College of Computing Studies, Laguna University.
+                </p>
+            </div>
+            <div>
+                <h4>Developers</h4>
+                <p class="footer-tag">Built by four, protecting all.</p>
+                <ul>
+                    <li>Julianna F. Altamirano</li>
+                    <li>Roselyn L. Macasinag</li>
+                    <li>Gail Angust L. Barrios</li>
+                    <li>Danica B. Agnes</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#install">Install</a></li>
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="copyright">&copy; <span id="year">2026</span> GRJD Shield. Detection results are machine-learning predictions and do not guarantee that a website is safe.</p>
+    </footer>
+
+    <!-- screenshot viewer -->
+    <div class="lightbox" id="lightbox" hidden>
+        <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+        <img id="lightboxImg" alt="">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
