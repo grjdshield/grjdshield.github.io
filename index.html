@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GRJD Shield | Detect the Threat, Defend Your Digital World</title>
-    <meta name="description" content="GRJD Shield is a free Chrome and Firefox extension that uses a Random Forest model to detect and block phishing websites in real time, before the page loads.">
+    <meta name="description" content="GRJD Shield is a free Chrome extension that uses a Random Forest model to detect and block phishing websites in real time, before the page loads.">
     <link rel="icon" href="images/icon.png">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -64,7 +64,7 @@
                     <span class="pill">GRJD Shield · Detect the Threat, Defend Your Digital World</span>
                     <h1>Protect Yourself from <span>Phishing Websites</span></h1>
                     <p class="lead">
-                        GRJD Shield is a free extension for Chrome and Firefox that checks every
+                        GRJD Shield is a free Chrome extension that checks every
                         website you open and warns you in real time, before a phishing page even loads.
                     </p>
                     <div class="hero-buttons">
@@ -100,7 +100,7 @@
                     <div class="card about-card">
                         <h3>The extension</h3>
                         <p>
-                            GRJD Shield is a browser extension for Google Chrome and Mozilla Firefox.
+                            GRJD Shield is a browser extension for Google Chrome, Microsoft Edge, Brave, and other Chromium browsers.
                             It uses a <strong>Random Forest</strong> machine-learning model to look at
                             the address (URL) of a website and decide whether it is
                             <strong>legitimate</strong> or <strong>phishing</strong>.
@@ -197,8 +197,8 @@
                     </article>
                     <article class="card feature">
                         <span class="feature-icon"><svg aria-hidden="true"><use href="#i-chrome"/></svg></span>
-                        <h3>Chrome and Firefox</h3>
-                        <p>Install it on Google Chrome or Mozilla Firefox. The same Random Forest model runs in both browsers.</p>
+                        <h3>One-click install</h3>
+                        <p>Add it from the Chrome Web Store. It starts protecting you right away, with no setup needed.</p>
                     </article>
                 </div>
             </div>
@@ -273,21 +273,25 @@
                 <div class="install-grid">
                     <div class="card">
                         <h3>How to install</h3>
-                        <p class="install-sub"><strong>On Google Chrome:</strong></p>
+
+                        <p class="install-sub"><strong>Option 1: Chrome Web Store (recommended)</strong></p>
                         <ol class="num-list">
-                            <li><strong>Download</strong> the extension ZIP file below and extract (unzip) it.</li>
-                            <li>Open Google Chrome and go to <code>chrome://extensions</code>.</li>
-                            <li>Turn on <strong>Developer mode</strong> at the top right.</li>
+                            <li>Click <strong>Add to Chrome</strong> below. It opens GRJD Shield on the Chrome Web Store.</li>
+                            <li>Click <strong>Add to Chrome</strong>, then <strong>Add extension</strong>.</li>
+                            <li>Click the puzzle icon in the toolbar and <strong>pin</strong> GRJD Shield.</li>
+                        </ol>
+                        <p class="install-hint">Also works on Microsoft Edge, Brave, Opera, and Vivaldi. On Edge, click <strong>Allow extensions from other stores</strong> first. On Opera, install Opera's <strong>Install Chrome Extensions</strong> add-on first.</p>
+
+                        <p class="install-sub"><strong>Option 2: Manual install (ZIP file)</strong></p>
+                        <ol class="num-list">
+                            <li>Click <strong>Download ZIP</strong> below and extract (unzip) the file.</li>
+                            <li>Open the extensions page of your browser: <code>chrome://extensions</code> (Chrome), <code>edge://extensions</code> (Edge), or <code>brave://extensions</code> (Brave).</li>
+                            <li>Turn on <strong>Developer mode</strong>.</li>
                             <li>Click <strong>Load unpacked</strong> and select the extracted <code>PhishingDetection</code> folder.</li>
                             <li>Click the puzzle icon in the toolbar and <strong>pin</strong> GRJD Shield.</li>
                         </ol>
-                        <p class="install-sub"><strong>On Mozilla Firefox:</strong></p>
-                        <ol class="num-list">
-                            <li>Extract the ZIP file, then go to <code>about:debugging</code> and click <strong>This Firefox</strong>.</li>
-                            <li>Click <strong>Load Temporary Add-on</strong> and select the <code>manifest.json</code> file inside the folder.</li>
-                            <li>Go to <code>about:addons</code>, open GRJD Shield &gt; <strong>Permissions</strong>, and turn on access to all websites (needed for the short link check).</li>
-                        </ol>
-                        <p class="note">The model loads in about 20 seconds after installing. Coming soon: install with one click from the Chrome Web Store and Firefox Add-ons.</p>
+
+                        <p class="note">GRJD Shield starts working right away. The detection model takes about 20 seconds to load the first time.</p>
                     </div>
 
                     <div class="card">
@@ -309,19 +313,18 @@
             <div class="wrap download-inner">
                 <div>
                     <h2>Protect your browsing today.</h2>
-                    <p>Free for Google Chrome and Mozilla Firefox. Detect the Threat, Defend Your Digital World.</p>
+                    <p>Free for Google Chrome, Microsoft Edge, Brave, and other Chromium browsers. Detect the Threat, Defend Your Digital World.</p>
                 </div>
                 <div class="download-buttons">
-                    <!-- PALITAN: ilagay ang file ng extension sa downloads/PhishingDetection.zip -->
-                    <a href="downloads/PhishingDetection.zip" class="btn btn-primary" download>
-                        <svg aria-hidden="true"><use href="#i-download"/></svg>
-                        Download Extension (ZIP)
-                    </a>
-                    <!-- PALITAN: kapag na-publish na, ilagay ang Chrome Web Store link sa href
-                         at tanggalin ang class="is-disabled" at aria-disabled -->
-                    <a href="#download" class="btn btn-light is-disabled" id="storeButton" aria-disabled="true">
+                    <!-- The Chrome Web Store link is set in script.js (CHROME_WEB_STORE_URL) -->
+                    <a href="#download" class="btn btn-primary is-disabled" id="storeButton" aria-disabled="true" target="_blank" rel="noopener">
                         <svg aria-hidden="true"><use href="#i-chrome"/></svg>
-                        Chrome Web Store (coming soon)
+                        <span id="storeButtonText">Add to Chrome (coming soon)</span>
+                    </a>
+                    <!-- PALITAN: ilagay ang zip ng extension sa downloads/PhishingDetection.zip -->
+                    <a href="downloads/PhishingDetection.zip" class="btn btn-light" download>
+                        <svg aria-hidden="true"><use href="#i-download"/></svg>
+                        Download ZIP (manual install)
                     </a>
                 </div>
             </div>
