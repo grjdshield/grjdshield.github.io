@@ -18,9 +18,20 @@ document.addEventListener("DOMContentLoaded", () => {
             menuBtn.setAttribute("aria-expanded", "false");
         }));
 
-    // ----- Chrome Web Store button (until the extension is published) -----
+    // ----- Chrome Web Store button -----
+    // PALITAN: kapag na-publish na sa Chrome Web Store, ilagay dito ang link, halimbawa:
+    // const CHROME_WEB_STORE_URL = "https://chromewebstore.google.com/detail/grjd-shield/abcdefghijklmnop";
+    const CHROME_WEB_STORE_URL = "";
+
     const storeButton = document.getElementById("storeButton");
+    const storeButtonText = document.getElementById("storeButtonText");
     if (storeButton) {
+        if (CHROME_WEB_STORE_URL) {
+            storeButton.href = CHROME_WEB_STORE_URL;
+            storeButton.classList.remove("is-disabled");
+            storeButton.removeAttribute("aria-disabled");
+            if (storeButtonText) storeButtonText.textContent = "Add to Chrome";
+        }
         storeButton.addEventListener("click", event => {
             if (storeButton.classList.contains("is-disabled")) event.preventDefault();
         });
