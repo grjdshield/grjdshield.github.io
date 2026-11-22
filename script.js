@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ----- Chrome Web Store button -----
     // PALITAN: kapag na-publish na sa Chrome Web Store, ilagay dito ang link, halimbawa:
     // const CHROME_WEB_STORE_URL = "https://chromewebstore.google.com/detail/grjd-shield/abcdefghijklmnop";
-    const CHROME_WEB_STORE_URL = "";
+    const CHROME_WEB_STORE_URL = "https://chromewebstore.google.com/detail/jndgobcbeomdopngjbppecahehdldblp";
 
     const storeButton = document.getElementById("storeButton");
     const storeButtonText = document.getElementById("storeButtonText");
